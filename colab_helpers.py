@@ -3,6 +3,7 @@ import subprocess
 import sys
 import importlib
 import tensorflow as tf
+import os
 
 def run_shell(cmd):
     res = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True)
