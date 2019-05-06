@@ -73,4 +73,4 @@ def bucket_dir(bucket_name, *dir_names):
     return os.path.join(bucket_name, dir_name)
 
 def test():
-    print(test)
+    print("test")
