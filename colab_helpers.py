@@ -4,7 +4,7 @@ import sys
 import importlib
 
 def run_shell(cmd):
-    res = subprocess.run(cmd, stdout=subprocess.PIPE)
+    res = subprocess.run(cmd.split(), stdout=subprocess.PIPE)
     sys.stdout.write(res.stdout)
 
 def mount_drive(path):
