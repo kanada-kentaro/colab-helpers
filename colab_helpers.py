@@ -6,8 +6,9 @@ import tensorflow as tf
 import os
 
 def run_shell(cmd):
-    res = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True)
+    res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     sys.stdout.write(res.stdout)
+    sys.stdout.write(res.stderr)
     return res
 
 def mount_drive(path):
