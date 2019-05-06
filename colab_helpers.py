@@ -3,7 +3,6 @@ import subprocess
 import sys
 import importlib
 
-
 def run_shell(cmd):
     res = subprocess.run(cmd, stdout=subprocess.PIPE)
     sys.stdout.write(res.stdout)
@@ -12,7 +11,7 @@ def mount_drive(path):
     drive.mount(path)
 
 def register_git_ssh_key(ssh_path, email, user_name):
-    run_shell("rm -rf /root /.ssh/")
+    run_shell("rm -rf /root/.ssh/")
     run_shell("cp -r {} /root/.ssh || chmod 700 /root/.ssh".format(ssh_path))
     run_shell("ssh-keyscan github.com >> /root/.ssh/known_hosts")
     run_shell("chmod 644 /root/.ssh/known_hosts")
@@ -31,6 +30,12 @@ def reload_from_str(modules, globals):
         reload(module, globals)
 
 def reload(module, globals):
+    if type(module) == str:
+        module_spec = importlib.util.find_spec(module)
+        if module_spec:
+            module = importlib.util.module_from_spec(module_spec)
+        else:
+            module = importlib.import_module(module)
     importlib.reload(module)
     funcs = [func for func in dir(module) if not func.startswith('__')]
     for func_name in funcs:
