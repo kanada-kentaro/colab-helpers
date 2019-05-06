@@ -60,7 +60,12 @@ def load_from_bucket(bucket_dir, fname):
 
 def load_or_execute(bucket_dir, fname, func, *args, **kwargs):
     force_execution = kwargs.get("force_execution")
+    if force_execution:
+        del kwargs["force_execution"]
     load = kwargs.get("load")
+    if load:
+        del kwargs["load"]
+
     if force_execution or not is_exist_in_bucket(bucket_dir,fname):
         func(args, kwargs)
         save_to_bucket(bucket_dir,fname)
