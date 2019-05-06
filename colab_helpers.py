@@ -65,9 +65,16 @@ def load_or_execute(bucket_dir, fname, func, *args, **kwargs):
     load = kwargs.get("load")
     if load:
         del kwargs["load"]
-
     if force_execution or not is_exist_in_bucket(bucket_dir,fname):
-        func(args, kwargs)
+        pass_args=[]
+        if args:
+            pass_args.append(args)
+        if any(kwargs):
+            pass_args.append(kwargs)
+        if pass_args:
+            func(*pass_args)
+        else:
+            func()
         save_to_bucket(bucket_dir,fname)
     else:
         if load != False:
