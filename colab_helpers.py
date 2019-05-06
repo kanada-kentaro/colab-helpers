@@ -60,11 +60,13 @@ def load_from_bucket(bucket_dir, fname):
 
 def load_or_execute(bucket_dir, fname, func, *args, **kwargs):
     force_execution = kwargs.get("force_execution")
+    load = kwargs.get("load")
     if force_execution or not is_exist_in_bucket(bucket_dir,fname):
         func(args, kwargs)
         save_to_bucket(bucket_dir,fname)
     else:
-        load_from_bucket(bucket_dir,fname)
+        if load != False:
+            load_from_bucket(bucket_dir,fname)
 
 def bucket_dir(bucket_name, *dir_names):
     bucket_name = 'gs://{}'.format(bucket_name)
