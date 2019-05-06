@@ -1,6 +1,8 @@
 from google.colab import drive
 import subprocess
 import sys
+import importlib
+
 
 def run_shell(cmd):
     res = subprocess.run(cmd, stdout=subprocess.PIPE)
@@ -17,3 +19,19 @@ def register_git_ssh_key(ssh_path, email, user_name):
     run_shell("git config --global user.email {}".format(email))
     run_shell("git config --global user.name {}".format(user_name))
 
+
+def git(repo_path, command):
+    run_shell("git - C {} {}".format(repo_path, command))
+
+def reload_from_str(modules, globals):
+    if type(modules) == str:
+        str_modules = [x.strip() for x in modules.split(',')]
+        modules = [importlib.import_module(x) for x in str_modules]
+    for module in modules:
+        reload(module, globals)
+
+def reload(module, globals):
+    importlib.reload(module)
+    funcs = [func for func in dir(module) if not func.startswith('__')]
+    for func_name in funcs:
+        globals()[func_name] = module.__dict__[func_name]
