@@ -4,7 +4,7 @@ import sys
 import importlib
 
 def run_shell(cmd):
-    res = subprocess.run(cmd.split(), stdout=subprocess.PIPE)
+    res = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True)
     sys.stdout.write(res.stdout)
 
 def mount_drive(path):
@@ -12,7 +12,8 @@ def mount_drive(path):
 
 def register_git_ssh_key(ssh_path, email, user_name):
     run_shell("rm -rf /root/.ssh/")
-    run_shell("cp -r {} /root/.ssh || chmod 700 /root/.ssh".format(ssh_path))
+    run_shell("cp -r {} /root/.ssh".format(ssh_path))
+    run_shell("chmod 700 /root/.ssh")
     run_shell("ssh-keyscan github.com >> /root/.ssh/known_hosts")
     run_shell("chmod 644 /root/.ssh/known_hosts")
     run_shell("git config --global user.email {}".format(email))
