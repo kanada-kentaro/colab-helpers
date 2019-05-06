@@ -35,7 +35,7 @@ def reloads(modules, globals):
 def reload(module, globals):
     if type(module) == str:
         importlib.import_module(module)
-        module = sys.module[module]
+        module = sys.modules[module]
     importlib.reload(module)
     funcs = [func for func in dir(module) if not func.startswith('__')]
     for func_name in funcs:
