@@ -42,7 +42,6 @@ def reload(module, globals):
     funcs = [func for func in dir(module) if not func.startswith('__')]
     for func_name in funcs:
         globals[func_name] = module.__dict__[func_name]
-        print("reloaded:{}".format(func_name))
 
 # save/load from buckets
 def is_exist_in_bucket(*fnames):
@@ -71,6 +70,3 @@ def bucket_dir(bucket_name, *dir_names):
     bucket_name = 'gs://{}'.format(bucket_name)
     dir_name =  os.path.join(*dir_names)
     return os.path.join(bucket_name, dir_name)
-
-def test():
-    print("test")
