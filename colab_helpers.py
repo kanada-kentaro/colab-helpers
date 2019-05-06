@@ -63,3 +63,8 @@ def load_or_execute(bucket_dir, fname, func, force_execution = False, *args, **k
         save_to_bucket(bucket_dir,fname)
     else:
         load_from_bucket(bucket_dir,fname)
+
+def bucket_dir(bucket_name, *dir_names):
+    bucket_name = 'gs://{}'.format(bucket_name)
+    dir_name =  os.path.join(*dir_names)
+    return os.path.join(bucket_name, dir_name)
