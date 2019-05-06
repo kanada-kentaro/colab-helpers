@@ -20,7 +20,7 @@ def register_git_ssh_key(ssh_path, email, user_name):
 
 
 def git(repo_path, command):
-    run_shell("git - C {} {}".format(repo_path, command))
+    run_shell("git -C {} {}".format(repo_path, command))
 
 def reload_from_str(modules, globals):
     if type(modules) == str:
@@ -31,11 +31,8 @@ def reload_from_str(modules, globals):
 
 def reload(module, globals):
     if type(module) == str:
-        module_spec = importlib.util.find_spec(module)
-        if module_spec:
-            module = importlib.util.module_from_spec(module_spec)
-        else:
-            module = importlib.import_module(module)
+        importlib.import_module(module)
+        module = sys.module[module]
     importlib.reload(module)
     funcs = [func for func in dir(module) if not func.startswith('__')]
     for func_name in funcs:
