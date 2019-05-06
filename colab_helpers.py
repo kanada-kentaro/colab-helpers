@@ -58,13 +58,17 @@ def load_from_bucket(bucket_dir, fname):
   bucket_fname = os.path.join(bucket_dir, fname)
   run_shell("gsutil cp {} {}".format(bucket_fname,fname))
 
+def pop_arg(kwargs, arg):
+    if arg in kwargs:
+        value = kwargs[arg]
+        del kwargs[arg]
+        return value
+    else:
+        return None
+
 def load_or_execute(bucket_dir, fname, func, *args, **kwargs):
-    force_execution = kwargs.get("force_execution")
-    if force_execution is not None:
-        del kwargs["force_execution"]
-    load = kwargs.get("load")
-    if load is not None:
-        del kwargs["load"]
+    force_execution = pop_arg(kwargs, "force_execution")
+    load = pop_arg(kwargs, "load")
     if force_execution or not is_exist_in_bucket(bucket_dir,fname):
         func(*args, **kwargs)
         save_to_bucket(bucket_dir,fname)
