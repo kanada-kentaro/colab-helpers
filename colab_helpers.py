@@ -41,7 +41,8 @@ def reload(module, globals):
     importlib.reload(module)
     funcs = [func for func in dir(module) if not func.startswith('__')]
     for func_name in funcs:
-        globals()[func_name] = module.__dict__[func_name]
+        globals[func_name] = module.__dict__[func_name]
+        print("reloaded:{}".format(func_name))
 
 # save/load from buckets
 def is_exist_in_bucket(*fnames):
