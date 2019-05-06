@@ -71,3 +71,6 @@ def bucket_dir(bucket_name, *dir_names):
     bucket_name = 'gs://{}'.format(bucket_name)
     dir_name =  os.path.join(*dir_names)
     return os.path.join(bucket_name, dir_name)
+
+def test():
+    print(test)
