@@ -85,7 +85,7 @@ def bucket_dir(bucket_name, *dir_names):
     dir_name =  os.path.join(*dir_names)
     return os.path.join(bucket_name, dir_name)
 
-def to_msgpack(data, fname):
+def to_mpack(data, fname):
     packer = msgpack.Packer(default=m.encode)
     with open(fname, "wb") as file:
         file.write(packer.pack(data))
