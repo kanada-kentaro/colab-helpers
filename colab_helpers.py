@@ -4,6 +4,8 @@ import sys
 import importlib
 import tensorflow as tf
 import os
+import msgpack
+import msgpack_numpy as m
 
 def run_shell(cmd):
     res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -80,3 +82,8 @@ def bucket_dir(bucket_name, *dir_names):
     bucket_name = 'gs://{}'.format(bucket_name)
     dir_name =  os.path.join(*dir_names)
     return os.path.join(bucket_name, dir_name)
+
+def to_msgpack(data, fname):
+    packer = msgpack.Packer(default=m.encode)
+    with open(fname, "wb") as file:
+        file.write(packer.pack(data))
