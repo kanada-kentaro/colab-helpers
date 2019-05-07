@@ -72,10 +72,12 @@ def load_or_execute(bucket_dir, fname, func, *args, **kwargs):
     force_execution = pop_arg(kwargs, "force_execution")
     load = pop_arg(kwargs, "load")
     if force_execution or not is_exist_in_bucket(bucket_dir,fname):
+        print("file {} doesn't exist in {}. execute function...".format(fname, bucket_dir))
         func(*args, **kwargs)
         save_to_bucket(bucket_dir,fname)
     else:
         if load != False:
+            print("file {} exist in {}. load file...".format(fname, bucket_dir))
             load_from_bucket(bucket_dir,fname)
 
 def bucket_dir(bucket_name, *dir_names):
