@@ -51,13 +51,13 @@ def is_exist_in_bucket(*fnames):
     res = run_shell("gsutil -q stat {}".format(fname))
     return res.returncode == 0
 
-def save_to_bucket(bucket_dir, fname):
-  tf.gfile.MakeDirs(bucket_dir)
-  bucket_fname = os.path.join(bucket_dir, fname)
+def save_to_bucket(bucket_directory, fname):
+  tf.gfile.MakeDirs(bucket_directory)
+  bucket_fname = os.path.join(bucket_directory, fname)
   run_shell("gsutil cp {} {}".format(fname, bucket_fname))
 
-def load_from_bucket(bucket_dir, fname):
-  bucket_fname = os.path.join(bucket_dir, fname)
+def load_from_bucket(bucket_directory, fname):
+  bucket_fname = os.path.join(bucket_directory, fname)
   run_shell("gsutil cp {} {}".format(bucket_fname,fname))
 
 def pop_arg(kwargs, arg):
@@ -68,17 +68,17 @@ def pop_arg(kwargs, arg):
     else:
         return None
 
-def load_or_execute(bucket_dir, fname, func, *args, **kwargs):
+def load_or_execute(bucket_directory, fname, func, *args, **kwargs):
     force_execution = pop_arg(kwargs, "force_execution")
     load = pop_arg(kwargs, "load")
-    if force_execution or not is_exist_in_bucket(bucket_dir,fname):
-        print("file {} doesn't exist in {}. execute function...".format(fname, bucket_dir))
+    if force_execution or not is_exist_in_bucket(bucket_directory, fname):
+        print("file {} doesn't exist in {}. execute function...".format(fname, bucket_directory))
         func(*args, **kwargs)
-        save_to_bucket(bucket_dir,fname)
+        save_to_bucket(bucket_directory, fname)
     else:
-        if load != False:
-            print("file {} exist in {}. load file...".format(fname, bucket_dir))
-            load_from_bucket(bucket_dir,fname)
+        if load:
+            print("file {} exist in {}. load file...".format(fname, bucket_directory))
+            load_from_bucket(bucket_directory, fname)
 
 def bucket_dir(bucket_name, *dir_names):
     bucket_name = 'gs://{}'.format(bucket_name)
