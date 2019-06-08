@@ -5,6 +5,8 @@ import tensorflow as tf
 import os
 import pprint
 import json
+from importlib.util import spec_from_file_location,module_from_spec
+import pathlib
 
 
 def run_shell(cmd):
@@ -70,17 +72,22 @@ def register_git_ssh_key(ssh_path, email, user_name):
     run_shell("git config --global user.name {}".format(user_name))
 
 
-def reload_modules(ex_globals):
-    """
+def import_from_path(path, globals):
+    path = pathlib.Path(path)
+    if path.is_dir():
+        files = [file for file in path.glob("**/[!__]*.py")  if not 'vendor' in str(file)]
+        for file in files:
+            __import_from_path(file, globals)
+    else:
+        __import_from_path(path, globals)
 
-    Args:
-        ex_globals (dict): globals() called in notebook
-    """
-    if type(module) == str:
-        importlib.import_module(module)
-        module = sys.modules[module]
-    importlib.reload(module)
-    funcs = [func for func in dir(module) if not func.startswith('__')]
+
+def __import_from_path(path, globals):
+    module_name = path.stem
+    spec = spec_from_file_location(module_name, str(path))
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    globals[module_name] = module
+    funcs = [func for func in module.__dir__() if not func.startswith('__')]
     for func_name in funcs:
         globals[func_name] = module.__dict__[func_name]
-
