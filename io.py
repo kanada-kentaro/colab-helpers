@@ -1,7 +1,7 @@
 import msgpack
 import msgpack_numpy as m
 from core import run_shell
-
+import os
 
 def to_mpack(data, fname):
     packer = msgpack.Packer(default=m.encode)
@@ -44,3 +44,9 @@ def load_or_execute(bucket_directory, fname, func, force_execution = False, load
         if load:
             print("file {} exist in {}. load file...".format(fname, bucket_directory))
             load_from_bucket(bucket_directory, fname)
+
+
+def bucket_dir(bucket_name, *dir_names):
+    bucket_name = 'gs://{}'.format(bucket_name)
+    dir_name =  os.path.join(*dir_names)
+    return os.path.join(bucket_name, dir_name)
