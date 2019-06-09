@@ -91,3 +91,7 @@ def __import_from_path(path, globals):
     funcs = [func for func in module.__dir__() if not func.startswith('__')]
     for func_name in funcs:
         globals[func_name] = module.__dict__[func_name]
+
+
+def halt_vm():
+    run_shell('kill -9 -1')
