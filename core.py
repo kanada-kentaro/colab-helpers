@@ -83,6 +83,9 @@ def import_from_path(path, globals):
 
 
 def __import_from_path(path, globals):
+    parent_path = str(path.parent)
+    if not parent_path in sys.path:
+        sys.path.append(parent_path)
     module_name = path.stem
     spec = spec_from_file_location(module_name, str(path))
     module = module_from_spec(spec)
