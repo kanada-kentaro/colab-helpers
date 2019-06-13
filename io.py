@@ -2,6 +2,7 @@ import msgpack
 import msgpack_numpy as m
 from core import run_shell
 import os
+import tensorflow as tf
 
 def to_mpack(data, fname):
     packer = msgpack.Packer(default=m.encode)
